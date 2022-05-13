@@ -1,48 +1,71 @@
-importScripts('acho.js', 'page.service.js');
+importScripts("tab.js", "page.service.js");
+console.log("Hi from Service worker Script file");
 
 chrome.commands.onCommand.addListener(async (command) => {
-    switch (command) {
-        case 'duplicate-tab':
-            await duplicateTab();
-            break;
-        case 'bark':
-            await barkTitle();
-            break;
-        default:
-            console.log(`Command ${command} not found`);
-    }
+  switch (command) {
+    case "duplicate-tab":
+      await duplicateTab();
+      break;
+    case "bark":
+      await getTitle();
+      break;
+    default:
+      console.log(`Command ${command} not found`);
+  }
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    await new Acho().growl();
+  await new Tab().notify();
 });
 
-chrome.tabs.onCreated.addListener(async tab => {
-    await new Acho().growl();
+chrome.tabs.onCreated.addListener(async (tab) => {
+  await new Tab().notify();
 });
 
 /**
  * Gets the current active tab URL and opens a new tab with the same URL.
  */
 const duplicateTab = async () => {
-    const acho = new Acho();
-    const tab = await acho.getActiveTab();
+  const tab = new Tab();
+  const currentTab = await tab.getActiveTab();
 
-    chrome.tabs.create({ url: tab.url, active: false });
-}
+  chrome.tabs.create({ url: currentTab.url, active: false });
+};
 
-/**
- * Sends message to the content script with the currently active tab title.
- */
-const barkTitle = async () => {
-    const acho = new Acho();
-    const tab = await acho.getActiveTab();
+const getTitle = async () => {
+  const tab = new Tab();
+  const currentTab = await tab.getActiveTab();
 
-    await chrome.tabs.sendMessage(tab.id, {
-        tabTitle: tab.title
-    });
+  await chrome.tabs.sendMessage(currentTab.id, {
+    tabTitle: currentTab.title,
+  });
 
-    await PageService.savePage(tab.title, tab.url);
+  await PageService.savePage(currentTab.title, currentTab.url);
 
-    await acho.quiet();
-}
+  await currentTab.clearNotifications();
+};
+
+const autoPopulateNetflixLoginDetails = () => {
+  const emailField = document.getElementById("id_userLoginId");
+  const passwordField = document.getElementById("id_password");
+
+  if (emailField && passwordField) {
+    emailField.value = "moriti.s.malope@gmail.com";
+    passwordField.value = "gsJwEvYG+PDP5@n";
+  } else {
+    console.log("emailField:", emailField);
+    console.log("passwordField:", passwordField);
+  }
+};
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("message recieved:", message.msg);
+
+  if (message.msg == "autofill") {
+    // autoPopulateNetflixLoginDetails();
+    sendResponse("OK bro");
+    console.log("Are we in?? ", chrome);
+  }
+
+  return true;
+});

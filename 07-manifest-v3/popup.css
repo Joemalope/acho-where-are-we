@@ -1,9 +1,92 @@
-#acho {
-    display: block;
-    margin: auto;
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, menu, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, main, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+:root {
+    --time: 1.11s;
+    --anim-duration: 10.0s;	
 }
 
 #dialog-box {
     text-align: center;
     font-size: medium;
 }
+
+body{
+    background: rgb(15, 15, 15);
+    width: 400px;
+    height: 600px;
+    overflow: hidden;
+}
+
+.showmax .radiating-item .c {
+    background-color: #e83d8e;
+}
+
+.netflix .radiating-item .c {
+    background-color: #E50914;
+}
+
+.radiating-items.active .radiating-item .c {
+	position: absolute;
+	width: 2px;
+	height: 2px;
+  	border-radius: 500px;
+    left:50%; top:50%;
+	animation-name: radiating;
+    animation-duration: calc(var(--anim-duration)/2);	
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.netflix{
+    background: url("https://www.freepnglogos.com/uploads/netflix-logo-circle-png-5.png");
+}
+
+.showmax{
+    background: url("https://i0.wp.com/techweez.com/wp-content/uploads/2016/12/Showmax-logo.png?fit=300%2C300&ssl=1");
+}
+
+.logo{
+    position: absolute;
+    left: calc(50% - 75px); 
+    top:calc(50% - 75px);
+    width: 150px;
+    height: 150px;
+    z-index: 999;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: grayscale(100%);    
+    /* transition: all 0.25s ease; */
+}
+
+
+.logo.active{
+    filter: grayscale(0%);    
+}
+
+.netflix_logo, .radiating-items{
+    /* position: absolute;
+    left:50%; top:50%;
+    border: solid 1px black; */
+}
+
+.radiating-item .pa1 {animation-delay: 0s;}
+.radiating-item .pa2 {animation-delay: calc(var(--time)/2)}
+.radiating-item .pa3 {animation-delay: var(--time)}
+
+/* The animation code */
+@keyframes radiating { 
+    from { transform: scale(1.0);
+            opacity: 0.5}
+    to   { transform: scale(100.0);
+            opacity: 0.0}
+}
+/* 
+to   { transform: scale(200.0);
+    opacity: 0.0} */

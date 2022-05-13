@@ -1,5 +1,5 @@
 .acho-notification {
-    background-color: white;
+    background-color: pink;
     border: rgb(242, 105, 77) 1px solid;
     border-radius: 5px;
     font-size: medium;
@@ -16,4 +16,8 @@
 
 .acho-notification > img {
     margin-right: 12px;
+}
+
+body{
+    background: pink;
 }

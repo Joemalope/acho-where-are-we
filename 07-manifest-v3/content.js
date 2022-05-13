@@ -1,33 +1,45 @@
 // Notification body.
 const notification = document.createElement("div");
-notification.className = 'acho-notification';
+notification.className = "acho-notification";
 
 // Notification icon.
-const icon = document.createElement('img');
+const icon = document.createElement("img");
 icon.src = chrome.runtime.getURL("images/icon32.png");
 notification.appendChild(icon);
 
 // Notification text.
-const notificationText = document.createElement('p');
+const notificationText = document.createElement("p");
 notification.appendChild(notificationText);
 
 // Add to current page.
 document.body.appendChild(notification);
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+const autoPopulateNetflixLoginDetails = () => {
+  const emailField = document.getElementById("signin_email");
+  const passwordField = document.getElementById("signin_password");
+  // const emailField = document.getElementById("id_userLoginId");
+  // const passwordField = document.getElementById("id_password");
+  const signInBtn = document.querySelector("#signin_btn_submit");
 
-    const notification = document.getElementsByClassName('acho-notification')[0];
-    const notificationText = notification.getElementsByTagName('p')[0];
+  if (emailField && passwordField) {
+    emailField.value = "joeymalope@gmail.com";
+    passwordField.value = "Test_00h00";
 
-    const acho = new Acho();
-    notificationText.innerHTML = acho.getBarkedTitle(request.tabTitle);
+    console.log("signInBtn: ", signInBtn);
+    setTimeout(() => signInBtn.click(), 3000);
+  } else {
+    console.log("emailField:", emailField);
+    console.log("passwordField:", passwordField);
+  }
+};
 
-    notification.style.display = 'flex';
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("message recieved(from content):", chrome);
+  if (message.msg === "autofill") {
+    sendResponse("OK");
+  }
 
-    setTimeout(function () {
-        notification.style.display = 'none';
-    }, 5000);
-    
-    return true;
+  return true;
 });
 
+autoPopulateNetflixLoginDetails();
